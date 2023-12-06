@@ -46,13 +46,16 @@
                     <li class="nav__item">
                         <a href="/parking" class="nav__link">Parking</a>
                     </li>
+                    <li class="nav__item">
+                        <a href="/details" class="nav__link"><%= empresaDetails.nombre %></a>
+                    </li>
                 </ul>
 
                 <div class="nav__close" id="nav-close">
                     <i class="ri-close-line"></i>
                 </div>
             </div>
-
+            
             <!-- Togglar Button -->
             <div class="nav__toggle" id="nav-toggle">
                 <i class="ri-menu-line"></i>
@@ -60,7 +63,48 @@
 
         </nav>
     </header>
+<style>
+        .nav__logo {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            position: relative;
+        }
 
+        .nav__logo h1 {
+            margin: 0;
+            margin-right: 10px;
+        }
+
+        .img-user {
+            width: 40px; /* Ajusta el tamaño de la imagen según tus necesidades */
+            height: 40px;
+            border-radius: 50%;
+        }
+
+        .user-dropdown {
+            display: none;
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            z-index: 1;
+            border-radius: 20px;
+        }
+
+        .nav__logo:hover .user-dropdown {
+            display: block;
+        }
+
+        .user-dropdown a {
+            display: block;
+            padding: 10px;
+            text-decoration: none;
+            color: #333;
+        }
+
+</style>
     <!--************* MAIN CODE ****************-->
 
     <main class="main">
@@ -117,12 +161,12 @@
                 <a href="#" class="home__button">START</a>
 
                 <div class="slider__bg">
-                <div class="slider__bg-navBtn active"></div>
-                <div class="slider__bg-navBtn"></div>
-                <div class="slider__bg-navBtn"></div>
-                <div class="slider__bg-navBtn"></div>
-                <div class="slider__bg-navBtn"></div>
-                
+                    <div class="slider__bg-navBtn active"></div>
+                    <div class="slider__bg-navBtn"></div>
+                    <div class="slider__bg-navBtn"></div>
+                    <div class="slider__bg-navBtn"></div>
+                    <div class="slider__bg-navBtn"></div>
+
                 </div>
 
 
@@ -136,15 +180,15 @@
             </div>
 
         </section>
-         <!--==================== GALLERY BANNER ====================-->
-         <section class="gallery section">
+        <!--==================== GALLERY BANNER ====================-->
+        <section class="gallery section">
             <div class="gallery__container container grid">
                 <video class="video__slide active" src="../assets/video/vid_1.mp4" autoplay muted loop></video>
                 <video class="video__slide" src="../assets/video/vid_4.mp4" autoplay muted loop></video>
                 <video class="video__slide" src="../assets/video/vid_3.mp4" autoplay muted loop></video>
                 <video class="video__slide" src="../assets/video/vid_2.mp4" autoplay muted loop></video>
                 <video class="video__slide" src="../assets/video/vid_5.mp4" autoplay muted loop></video>
-            
+
             </div>
 
         </section>
@@ -450,7 +494,7 @@
             </div>
 
         </section>
-       
+
 
         <!--==================== OFFER ====================-->
         <section class="offer section">
