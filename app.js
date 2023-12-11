@@ -1,4 +1,4 @@
-// index.js
+// app.js
 const express = require('express');
 const bodyParser = require('body-parser');
 const axios = require('axios');
@@ -21,12 +21,30 @@ app.use(session({
 app.use('/assets', express.static('assets'));
 app.use('/css', express.static('assets/css'));
 
-// Ruta de inicio
+// Middleware de autenticación
+const authenticate = (req, res, next) => {
+    // Verificar si el usuario está autenticado
+    if (req.session.empresaId) {
+        // Si está autenticado, continuar con la siguiente ruta
+        next();
+    } else {
+        // Si no está autenticado, redirigir al inicio
+        res.redirect('/');
+    }
+};
+
+// Ruta de inicio redirigida a la ruta /home
 app.get('/', (req, res) => {
-    res.render('index');
+    // Renderizar la vista home con el estado de la sesión
+    const empresaDetails = req.session.empresaId ? {} : null;
+    res.render('home', { empresaDetails });
 });
 
 // Ruta de login
+app.get('/login', (req, res) => {
+    res.render('index'); // Asegúrate de tener una vista llamada "login.ejs"
+});
+
 app.post('/login', async (req, res) => {
     try {
         // Hacer solicitud a tu API de login
@@ -53,13 +71,25 @@ app.post('/login', async (req, res) => {
     }
 });
 
+// Ruta para cerrar sesión
+app.get('/logout', (req, res) => {
+    // Destruir la sesión
+    req.session.destroy((err) => {
+        if (err) {
+            console.error(err);
+        }
+        // Redirigir al inicio después de cerrar sesión
+        res.redirect('/');
+    });
+});
+
 // Ruta para mostrar detalles de la empresa en /home
-app.get('/home/:id', async (req, res) => {
+app.get('/home/:id', authenticate, async (req, res) => {
     try {
-        // Utilizar el ID de la empresa almacenado en la sesión
+        // Obtener el ID de la empresa almacenado en la sesión
         const empresaId = req.session.empresaId;
 
-        // Hacer solicitud a tu API de empresa con la ID almacenada en la sesión
+        // Hacer la solicitud a tu API de empresa
         const empresaResponse = await axios.get(`http://localhost:9000/api/empresa/${empresaId}`);
 
         // Modificar la URL de la imagen para incluir el host
@@ -76,35 +106,15 @@ app.get('/home/:id', async (req, res) => {
     }
 });
 
+// Ruta de login
+app.get('/login', (req, res) => {
+    res.render('/'); // Asegúrate de tener una vista llamada "login.ejs"
+});
 
-// Ruta para parking
+// Ruta de parking
 app.get('/parking', (req, res) => {
     res.render('parking');
 });
-
-// Ruta para detalles
-app.get('/details', async (req, res) => {
-    try {
-        // Utilizar el ID de la empresa almacenado en la sesión
-        const empresaId = req.session.empresaId;
-
-        // Hacer solicitud a tu API de empresa con la ID almacenada en la sesión
-        const empresaResponse = await axios.get(`http://localhost:9000/api/empresa/${empresaId}`);
-
-        // Modificar la URL de la imagen para incluir el host
-        const empresaDetails = {
-            ...empresaResponse.data,
-            imagen: 'http://localhost:9000/' + empresaResponse.data.imagen,
-        };
-
-        // Renderizar vista de detalles con detalles de la empresa
-        res.render('details', { empresaDetails });
-    } catch (error) {
-        console.error(error);
-        res.render('login-error');
-    }
-});
-
 app.listen(port, () => {
     console.log(`Servidor corriendo en http://localhost:${port}`);
 });
