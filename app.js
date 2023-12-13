@@ -106,15 +106,31 @@ app.get('/home/:id', authenticate, async (req, res) => {
     }
 });
 
-// Ruta de login
-app.get('/login', (req, res) => {
-    res.render('/'); // Asegúrate de tener una vista llamada "login.ejs"
-});
+
 
 // Ruta de parking
-app.get('/parking', (req, res) => {
-    res.render('parking');
+app.get('/parking', authenticate, async (req, res) => {
+    try {
+        // Obtener el ID de la empresa almacenado en la sesión
+        const empresaId = req.session.empresaId;
+
+        // Hacer la solicitud a tu API de empresa
+        const empresaResponse = await axios.get(`http://localhost:9000/api/empresa/${empresaId}`);
+
+        // Modificar la URL de la imagen para incluir el host
+        const empresaDetails = {
+            ...empresaResponse.data,
+            imagen: 'http://localhost:9000/' + empresaResponse.data.imagen,
+        };
+
+        // Renderizar vista de parking con detalles de la empresa
+        res.render('parking', { empresaDetails });
+    } catch (error) {
+        console.error(error);
+        res.render('login-error');
+    }
 });
+
 app.listen(port, () => {
     console.log(`Servidor corriendo en http://localhost:${port}`);
 });
