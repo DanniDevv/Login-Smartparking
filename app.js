@@ -106,13 +106,17 @@ app.get('/home/:id', authenticate, async (req, res) => {
     }
 });
 
-
-
-// Ruta de parking
+// Ruta para mostrar detalles de la empresa en /home
 app.get('/parking', authenticate, async (req, res) => {
     try {
         // Obtener el ID de la empresa almacenado en la sesión
         const empresaId = req.session.empresaId;
+
+        // Check if the user is authenticated
+        if (!empresaId) {
+            // Redirect to the notify page if the user is not authenticated
+            return res.redirect('/notify');
+        }
 
         // Hacer la solicitud a tu API de empresa
         const empresaResponse = await axios.get(`http://localhost:9000/api/empresa/${empresaId}`);
@@ -130,6 +134,12 @@ app.get('/parking', authenticate, async (req, res) => {
         res.render('login-error');
     }
 });
+
+// Ruta para la página de notificación (notify)
+app.get('/notify', (req, res) => {
+    res.render('notify'); // Asegúrate de tener una vista llamada "notify.ejs"
+});
+
 
 app.listen(port, () => {
     console.log(`Servidor corriendo en http://localhost:${port}`);

@@ -29,6 +29,7 @@
                 <img src="../assets/img/logo7.png" alt="Logo de Smart Parking" class="nav_logos__img">
                 Smart Parking
             </a>
+
             <div class="nav__menu" id="nav-menu">
                 <ul class="nav__list">
                     <li class="nav__item">
@@ -43,6 +44,7 @@
                     <li class="nav__item">
                         <a href="#featured" class="nav__link">Featured</a>
                     </li>
+
                     <div class="user-menu">
                         <% if (empresaDetails && empresaDetails.nombre) { %>
                             <!-- Si hay un usuario logueado y tiene un nombre -->
@@ -98,7 +100,7 @@
 
 
                     <br>
-                    <img src="../../../assets/img/home6.png" alt="" class="home__img">
+                    <img src="../assets/img/home6.png" alt="" class="home__img">
                     <br>
                     <h2 class="home__subtitle">
                         CONTAMOS CON 
@@ -136,8 +138,13 @@
 
                 </div>
 
-                <a href="/parking" class="home__button">INICIAR</a>
-
+                <% if (empresaDetails && empresaDetails.nombre) { %>
+                    <!-- Si hay un usuario logueado y tiene un nombre -->
+                    <a href="/parking" class="home__button">INICIAR</a>
+                <% } else { %>
+                    <!-- Si no hay un usuario logueado o no tiene un nombre, redirige a /notify -->
+                    <a href="/notify" class="home__button">INICIAR</a>
+                <% } %>
                 <div class="slider__bg">
                 <div class="slider__bg-navBtn active"></div>
                 <div class="slider__bg-navBtn"></div>
